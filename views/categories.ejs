@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Category: <%= category.name %></title>
+</head>
+<body>
+    <h1>Category: <%= category.name %></h1>
+    <p><%= category.description %></p>
+    <h2>Products</h2>
+    <ul>
+        <% products.forEach(product => { %>
+            <li><%= product.name %> - <%= product.price %></li>
+        <% }) %>
+    </ul>
+</body>
+</html>

@@ -5,7 +5,7 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('./config/passport-config');
 const isLoggedIn = require('./middleware/isLoggedIn');
-const { User, Product } = require('./models');
+const { User, Product, Category } = require('./models');
 
 // Environment variables
 const SECRET_SESSION = process.env.SECRET_SESSION;
@@ -34,7 +34,7 @@ app.use((req, res, next) => {
 })
 
 app.get('/', (req,res) => {
-    res.render('home', {})
+    res.redirect('/products');
 })
 
 // Import auth routes

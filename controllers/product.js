@@ -1,21 +1,64 @@
 const express = require('express');
 const router = express.Router();
-const { Product } = require('../models');
+const Product = require('../models/product');
+const Category = require('../models/category');
+const Favorite = require('../models/favorite');
 
 // Get all products
 router.get('/', async (req, res) => {
-    const products = await Product.find();
-    res.json(products);
+    try {
+        const products = await Product.find().populate('category');
+        res.render('home', { products });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
 });
 
 // Get a single product by ID
 router.get('/:id', async (req, res) => {
-    const product = await Product.findById(req.params.id);
-    res.json(product);
+    try {
+        const product = await Product.findById(req.params.id);
+        if (!product) {
+            return res.status(404).send('Product not found');
+        }
+        res.render('details', { product });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
 });
 
-// Create a new product
-router.post('/', async (req, res) => {
+//get categories
+router.get('/categories', async (req, res) => {
+    try {
+        const categories = await Category.find();
+        res.render('categories', { categories });
+    } catch (error) {
+        res.status(500).send('Server Error');
+    }
+});
+
+// get favorites
+router.get('/favorites', async (req, res) => {
+    try {
+        const favorites = await Favorite.find().populate('product');
+        res.render('favorites', { favorites });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
+});
+
+// add product to favorites
+router.post('/favorites', async (req, res) => {
+    const newProduct = new Product(req.body);
+    await newProduct.save();
+    res.json(newProduct);
+});
+
+// add product to cart
+router.post('/cart', async (req, res) => {
     const newProduct = new Product(req.body);
     await newProduct.save();
     res.json(newProduct);
