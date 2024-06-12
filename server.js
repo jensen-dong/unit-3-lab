@@ -37,6 +37,8 @@ app.get('/', (req,res) => {
     res.render('home', {})
 })
 
+app.use('/', require('./controllers/products.js'))
+
 // import auth routes below
 app.use('/auth', require('./controllers/auth'))
 
