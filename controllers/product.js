@@ -4,13 +4,13 @@ const { Product } = require('../models');
 
 // Get all products
 router.get('/', async (req, res) => {
-    const products = await Product.find().populate('category');
+    const products = await Product.find();
     res.json(products);
 });
 
 // Get a single product by ID
 router.get('/:id', async (req, res) => {
-    const product = await Product.findById(req.params.id).populate('category');
+    const product = await Product.findById(req.params.id);
     res.json(product);
 });
 
@@ -33,4 +33,11 @@ router.delete('/:id', async (req, res) => {
     res.json({ message: 'Product deleted' });
 });
 
+// Get products by category
+router.get('/category/:category', async (req, res) => {
+    const products = await Product.find({ category: req.params.category });
+    res.json(products);
+});
+
 module.exports = router;
+
